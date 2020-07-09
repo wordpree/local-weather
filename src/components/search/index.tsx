@@ -1,3 +1,14 @@
+import React from "react";
 import SearchForm from "./SearchForm";
+import AutocompleteList from "./AutocompleteList";
 
-export default SearchForm;
+const Search = () => {
+  return (
+    <div>
+      <SearchForm />
+      <AutocompleteList />
+    </div>
+  );
+};
+
+export default Search;

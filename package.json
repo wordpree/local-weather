@@ -2,6 +2,7 @@
   "name": "local-weather",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://maps.googleapis.com/",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -11,11 +12,14 @@
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "@types/throttle-debounce": "^2.1.0",
+    "axios": "^0.19.2",
     "framer-motion": "^1.11.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-scripts": "3.4.1",
+    "throttle-debounce": "^2.2.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
