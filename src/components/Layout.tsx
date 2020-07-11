@@ -1,13 +1,14 @@
 import React from "react";
-import SearchForm from "./search";
-import { Container } from "@material-ui/core";
+import Banner from "./Banner";
 import { WeatherContextProvid } from "../stateManager/context";
+import Footer from "./Footer";
+import Header from "./Header";
 const Layout = () => {
   return (
     <WeatherContextProvid>
-      <Container>
-        <SearchForm />
-      </Container>
+      <Header />
+      <Banner />
+      <Footer />
     </WeatherContextProvid>
   );
 };

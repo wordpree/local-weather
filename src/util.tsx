@@ -54,3 +54,12 @@ export function getInitialState(reducers: any) {
     };
   }, {} as StateType);
 }
+
+export function hanldeDataDispatch(dispatch: React.Dispatch<any>) {
+  return function (actions: any, url: string, type: { [key: string]: string }) {
+    dispatch(actions.requestData(type.request));
+    fetchData(url)
+      .then((data) => dispatch(actions.getDataSuccess(data, type.success)))
+      .catch((error) => dispatch(actions.getDataFailed(error, type.failed)));
+  };
+}

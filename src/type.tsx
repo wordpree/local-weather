@@ -12,13 +12,14 @@ export type Prediction = {
 type Form = {
   input: string;
 };
-export interface PlaceDetail {
+export interface Detail {
   geometry: {
     location: Geometry;
   };
   photos: Photo[];
 }
-export type Autocomplete = Prediction[];
+export type PlaceDetail = { result: Detail };
+export type Autocomplete = { predictions: Prediction[] };
 
 export interface DataFetching<T> {
   data: T;
@@ -29,6 +30,6 @@ export interface DataFetching<T> {
 
 export interface StateType {
   form: Form;
-  autocomplete: DataFetching<Autocomplete>;
-  placeDetail: DataFetching<PlaceDetail>;
+  autocomplete: DataFetching<Prediction[]>;
+  placeDetail: DataFetching<Detail>;
 }

@@ -2,26 +2,32 @@ import React from "react";
 import DotLoading from "../DotLoading";
 import * as TYPE from "../../stateManager/actionType";
 import { motion } from "framer-motion";
-import { Autocomplete } from "../../type";
-import { ListItem, List, ListItemText } from "@material-ui/core";
+import { Prediction } from "../../type";
+import { ListItem, List, ListItemText, makeStyles } from "@material-ui/core";
 import { useWeatherContext } from "../../stateManager/context";
-import { getGoogleFetchUrl, fetchData } from "../../util";
-import {
-  getInput,
-  clearData,
-  requestData,
-  getDataFailed,
-  getDataSuccess,
-} from "../../stateManager/actions";
+import { getGoogleFetchUrl, hanldeDataDispatch } from "../../util";
+import * as actions from "../../stateManager/actions";
 import {
   GOOGLE_PLACE_DETAIL_QUERY,
   GOOGLE_PLACE_DETAIL_PATH,
   API_KEY,
   CORS,
-} from "../constant";
+} from "../../constant";
+
+const useStyles = makeStyles((theme) => ({
+  list: {
+    maxWidth: "80%",
+  },
+}));
 
 const AutocompleteList = () => {
+  const classes = useStyles();
   const { state, dispatch } = useWeatherContext();
+  const type = {
+    request: TYPE.FETCH_DETAIL_REQUEST,
+    success: TYPE.FETCH_DETAIL_SUCCESS,
+    failed: TYPE.FETCH_DETAIL_FAILED,
+  };
   const { data, loading, success, error } = state.autocomplete;
   if (error) {
     return (
@@ -33,7 +39,7 @@ const AutocompleteList = () => {
   if (loading) {
     return <DotLoading />;
   }
-  const handleClick = (list: Autocomplete) => (id: string) => {
+  const handleClick = (list: Prediction[]) => (id: string) => {
     const listItem = list.find((l) => l.place_id === id);
     if (!listItem) return null;
     const { place_id, description } = listItem;
@@ -43,25 +49,18 @@ const AutocompleteList = () => {
       GOOGLE_PLACE_DETAIL_QUERY,
       API_KEY
     );
-    dispatch(getInput(description, TYPE.INPUT_SEARCH));
-    dispatch(requestData(TYPE.FETCH_DETAIL_REQUEST));
-    fetchData(fetchUrl)
-      .then((data) =>
-        dispatch(getDataSuccess(data.result, TYPE.FETCH_DETAIL_SUCCESS))
-      )
-      .catch((error) =>
-        dispatch(getDataFailed(error, TYPE.FETCH_DETAIL_FAILED))
-      );
-    dispatch(clearData(TYPE.CLEAR_AUTOCOMPLETE));
+    dispatch(actions.getInput(description, TYPE.INPUT_SEARCH));
+    hanldeDataDispatch(dispatch)(actions, fetchUrl, type);
+    dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
   };
-  const renderList = (list: Autocomplete) => {
+  const renderList = (list: Prediction[]) => {
     if (list.length) {
       return list.map((l) => (
         <motion.div
           key={l.place_id}
+          transition={{ type: "spring", stiffness: 300 }}
           whileHover={{
-            scale: 1.03,
-            boxShadow: "0 0 4px rgba(0,0,0,0.25)",
+            scale: 1.04,
             originX: 0,
           }}
         >
@@ -72,7 +71,9 @@ const AutocompleteList = () => {
       ));
     }
   };
-  return <List>{success ? renderList(data) : null}</List>;
+  return (
+    <List className={classes.list}>{success ? renderList(data) : null}</List>
+  );
 };
 
 export default AutocompleteList;

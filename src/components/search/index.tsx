@@ -4,10 +4,10 @@ import AutocompleteList from "./AutocompleteList";
 
 const Search = () => {
   return (
-    <div>
+    <>
       <SearchForm />
       <AutocompleteList />
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useReducer, useContext, Dispatch } from "react";
 import { inputReducer, detailReducer, autocompleteReducer } from "./reducer";
-import { StateType, PlaceDetail } from "../type";
+import { StateType, Detail } from "../type";
 import { combineReducer } from "../util";
 
 interface ICProps {
@@ -18,7 +18,7 @@ const initialState: StateType = {
     success: false,
   },
   placeDetail: {
-    data: {} as PlaceDetail,
+    data: {} as Detail,
     loading: false,
     error: "",
     success: false,

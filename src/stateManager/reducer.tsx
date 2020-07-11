@@ -1,5 +1,5 @@
 import * as TYPE from "./actionType";
-import { StateType } from "../type";
+import { StateType, Autocomplete, PlaceDetail } from "../type";
 
 //single reducer rather focuses on the being changed value not the whole state
 export function inputReducer(state: StateType, action: TYPE.ActionType) {
@@ -27,9 +27,10 @@ export function autocompleteReducer(state: StateType, action: TYPE.ActionType) {
       };
     case TYPE.FETCH_AUTOCOMPLETE_SUCCESS:
       const { data } = action as TYPE.GetAutocompleteSuccess;
+      const { predictions } = data as Autocomplete;
       return {
         ...state,
-        data,
+        data: predictions,
         loading: false,
         success: true,
       };
@@ -62,9 +63,10 @@ export function detailReducer(state: StateType, action: TYPE.ActionType) {
       };
     case TYPE.FETCH_DETAIL_SUCCESS:
       const { data } = action as TYPE.GetDetailSuccess;
+      const { result } = data as PlaceDetail;
       return {
         ...state,
-        data,
+        data: result,
         loading: false,
         success: true,
       };
