@@ -1,14 +1,8 @@
 import React from "react";
 import SearchForm from "./SearchForm";
-import AutocompleteList from "./AutocompleteList";
 
 const Search = () => {
-  return (
-    <>
-      <SearchForm />
-      <AutocompleteList />
-    </>
-  );
+  return <SearchForm />;
 };
 
 export default Search;

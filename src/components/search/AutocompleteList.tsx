@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Prediction } from "../../type";
 import { ListItem, List, ListItemText, makeStyles } from "@material-ui/core";
 import { useWeatherContext } from "../../stateManager/context";
-import { getGoogleFetchUrl, hanldeDataDispatch } from "../../util";
+import { getGoogleFetchUrl, dispatchWithThrottle } from "../../util";
 import * as actions from "../../stateManager/actions";
 import {
   GOOGLE_PLACE_DETAIL_QUERY,
@@ -19,8 +19,12 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "80%",
   },
 }));
+type InputRef = React.MutableRefObject<HTMLInputElement | undefined>;
+interface IAProps {
+  inputRef: InputRef;
+}
 
-const AutocompleteList = () => {
+const AutocompleteList = ({ inputRef }: IAProps) => {
   const classes = useStyles();
   const { state, dispatch } = useWeatherContext();
   const { data, loading, success, error } = state.autocomplete;
@@ -34,6 +38,7 @@ const AutocompleteList = () => {
   if (loading) {
     return <DotLoading />;
   }
+  const focusInput = (ref: InputRef) => ref.current && ref.current.focus();
   const handleClick = (list: Prediction[]) => (id: string) => {
     const listItem = list.find((l) => l.place_id === id);
     if (!listItem) return null;
@@ -45,8 +50,9 @@ const AutocompleteList = () => {
       API_KEY
     );
     dispatch(actions.getInput(description, TYPE.INPUT_SEARCH));
-    hanldeDataDispatch(dispatch)(actions, fetchUrl, detail);
+    dispatchWithThrottle(dispatch)(actions, fetchUrl, detail);
     dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
+    focusInput(inputRef);
   };
   const renderList = (list: Prediction[]) => {
     if (list.length) {

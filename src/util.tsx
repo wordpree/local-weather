@@ -1,5 +1,6 @@
 import { StateType, PlaceDetail, Autocomplete, Detail } from "./type";
 import { ActionType } from "./stateManager/actionType";
+import { throttle } from "throttle-debounce";
 
 type SearchItem = { [key: string]: string };
 type Key = keyof StateType;
@@ -55,13 +56,12 @@ export function getInitialState(reducers: any) {
   }, {} as StateType);
 }
 
-export function hanldeDataDispatch(dispatch: React.Dispatch<any>) {
+function hanldeDataDispatch(dispatch: React.Dispatch<any>) {
   return function (
     actions: any,
     fetchUrl: string,
     type: { [key: string]: string }
   ) {
-    console.log("dispatch...");
     dispatch(actions.requestData(type.request));
     fetchData(fetchUrl)
       .then((data) => dispatch(actions.getDataSuccess(data, type.success)))
@@ -74,4 +74,10 @@ export function getWeatherFetchUrl(detail: Detail, url: string) {
   const location = detail.geometry.location;
   const { lat, lng } = location;
   return `${url}&lat=${lat}&lon=${lng}`;
+}
+
+export function dispatchWithThrottle(dispatch: React.Dispatch<any>) {
+  return throttle(200, (actions, fetchUrl, type) =>
+    hanldeDataDispatch(dispatch)(actions, fetchUrl, type)
+  );
 }

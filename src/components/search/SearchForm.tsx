@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { makeStyles, Paper, InputBase, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import AutocompleteList from "./AutocompleteList";
 import { useWeatherContext } from "../../stateManager/context";
 import {
   getGoogleFetchUrl,
-  hanldeDataDispatch,
+  dispatchWithThrottle,
   getWeatherFetchUrl,
 } from "../../util";
 import * as TYPE from "../../stateManager/actionType";
@@ -19,8 +20,10 @@ import {
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  entry: {
     marginLeft: "2rem",
+  },
+  root: {
     display: "flex",
     alignItems: "center",
     padding: "3px 6px",
@@ -34,17 +37,15 @@ const useStyles = makeStyles((theme) => ({
 
 const SearchForm = () => {
   const classes = useStyles();
+  const inputRef = useRef<HTMLInputElement>();
   const { state, dispatch } = useWeatherContext();
   const weatherUrl = getWeatherFetchUrl(
     state.placeDetail.data,
     OPEN_WEATHER_MAP_URL
   );
-  const handleClick = () => {
-    hanldeDataDispatch(dispatch)(actions, weatherUrl, weather);
-  };
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
-    hanldeDataDispatch(dispatch)(actions, weatherUrl, weather);
+    dispatchWithThrottle(dispatch)(actions, weatherUrl, weather);
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -61,22 +62,26 @@ const SearchForm = () => {
       dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
       dispatch(actions.clearData(TYPE.CLEAR_DETAIL));
     } else {
-      hanldeDataDispatch(dispatch)(actions, fetchUrl, autocomplete);
+      dispatchWithThrottle(dispatch)(actions, fetchUrl, autocomplete);
     }
   };
   return (
-    <Paper component="form" onSubmit={handleSubmit} className={classes.root}>
-      <InputBase
-        placeholder="Search your location..."
-        inputProps={{ "aria-label": "search location" }}
-        onChange={handleChange}
-        value={state.form.input}
-        className={classes.input}
-      />
-      <IconButton type="submit" aria-label="search" onClick={handleClick}>
-        <SearchIcon />
-      </IconButton>
-    </Paper>
+    <div className={classes.entry}>
+      <Paper component="form" onSubmit={handleSubmit} className={classes.root}>
+        <InputBase
+          placeholder="Search your location..."
+          inputProps={{ "aria-label": "search location" }}
+          onChange={handleChange}
+          value={state.form.input}
+          className={classes.input}
+          inputRef={inputRef}
+        />
+        <IconButton type="submit" aria-label="search">
+          <SearchIcon />
+        </IconButton>
+      </Paper>
+      <AutocompleteList inputRef={inputRef} />
+    </div>
   );
 };
 
