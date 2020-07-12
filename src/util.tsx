@@ -1,4 +1,4 @@
-import { StateType, PlaceDetail, Autocomplete } from "./type";
+import { StateType, PlaceDetail, Autocomplete, Detail } from "./type";
 import { ActionType } from "./stateManager/actionType";
 
 type SearchItem = { [key: string]: string };
@@ -56,10 +56,22 @@ export function getInitialState(reducers: any) {
 }
 
 export function hanldeDataDispatch(dispatch: React.Dispatch<any>) {
-  return function (actions: any, url: string, type: { [key: string]: string }) {
+  return function (
+    actions: any,
+    fetchUrl: string,
+    type: { [key: string]: string }
+  ) {
+    console.log("dispatch...");
     dispatch(actions.requestData(type.request));
-    fetchData(url)
+    fetchData(fetchUrl)
       .then((data) => dispatch(actions.getDataSuccess(data, type.success)))
       .catch((error) => dispatch(actions.getDataFailed(error, type.failed)));
   };
+}
+
+export function getWeatherFetchUrl(detail: Detail, url: string) {
+  if (!detail.hasOwnProperty("geometry")) return "";
+  const location = detail.geometry.location;
+  const { lat, lng } = location;
+  return `${url}&lat=${lat}&lon=${lng}`;
 }

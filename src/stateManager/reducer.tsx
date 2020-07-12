@@ -1,7 +1,7 @@
 import * as TYPE from "./actionType";
-import { StateType, Autocomplete, PlaceDetail } from "../type";
+import { StateType, Autocomplete, PlaceDetail, WeatherData } from "../type";
 
-//single reducer rather focuses on the being changed value not the whole state
+//single reducer rather focuses on the being changed value inside the whole state
 export function inputReducer(state: StateType, action: TYPE.ActionType) {
   const { input, type } = action as TYPE.Input;
   switch (type) {
@@ -71,6 +71,35 @@ export function detailReducer(state: StateType, action: TYPE.ActionType) {
         success: true,
       };
     case TYPE.FETCH_DETAIL_FAILED:
+      const { error } = action as TYPE.GetDetailFail;
+      return {
+        ...state,
+        error,
+        success: false,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+}
+
+export function weatherReducer(state: StateType, action: TYPE.ActionType) {
+  const { type } = action;
+  switch (type) {
+    case TYPE.FETCH_WEATHER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case TYPE.FETCH_WEATHER_SUCCESS:
+      const { data } = action as TYPE.GetWeatherSuccess;
+      return {
+        ...state,
+        data,
+        loading: false,
+        success: true,
+      };
+    case TYPE.FETCH_WEATHER_FAILED:
       const { error } = action as TYPE.GetDetailFail;
       return {
         ...state,

@@ -1,4 +1,4 @@
-import { Autocomplete, PlaceDetail } from "../type";
+import { Autocomplete, PlaceDetail, WeatherData } from "../type";
 
 export const INPUT_SEARCH = "INPUT_SEARCH";
 export const CLEAR_AUTOCOMPLETE = "CLEAR_AUTOCOMPLETE";
@@ -9,6 +9,9 @@ export const CLEAR_DETAIL = "CLEAR_DETAIL";
 export const FETCH_DETAIL_SUCCESS = "FETCH_DETAIL_SUCCESS";
 export const FETCH_DETAIL_FAILED = "FETCH_DETAIL_FAILED";
 export const FETCH_DETAIL_REQUEST = "FETCH_DETAIL_REQUEST";
+export const FETCH_WEATHER_REQUEST = "FETCH_WEATHER_REQUEST";
+export const FETCH_WEATHER_SUCCESS = "FETCH_WEATHER_SUCCESS";
+export const FETCH_WEATHER_FAILED = "FETCH_WEATHER_FAILED";
 
 //form input
 export interface Input {
@@ -23,7 +26,7 @@ export interface RequestAutocomplete {
 }
 export interface GetAutocompleteSuccess {
   type: typeof FETCH_AUTOCOMPLETE_SUCCESS;
-  data: Autocomplete | PlaceDetail;
+  data: Autocomplete;
   loading: boolean;
   success: boolean;
 }
@@ -35,13 +38,13 @@ export interface GetAutocompleteFail {
 }
 export interface ClearAutocomplete {
   type: typeof CLEAR_AUTOCOMPLETE;
-  data: Autocomplete | PlaceDetail;
+  data: Autocomplete;
 }
 
 //google place api detail
 export interface ClearDetail {
   type: typeof CLEAR_DETAIL;
-  data: Autocomplete | PlaceDetail;
+  data: PlaceDetail;
 }
 export interface RequestDetail {
   type: typeof FETCH_DETAIL_REQUEST;
@@ -49,12 +52,30 @@ export interface RequestDetail {
 }
 export interface GetDetailSuccess {
   type: typeof FETCH_DETAIL_SUCCESS;
-  data: Autocomplete | PlaceDetail;
+  data: PlaceDetail;
   loading: boolean;
   success: boolean;
 }
 export interface GetDetailFail {
   type: typeof FETCH_DETAIL_FAILED;
+  loading: boolean;
+  error: string;
+  success: boolean;
+}
+
+//open weather maps api
+export interface RequestWeather {
+  type: typeof FETCH_WEATHER_REQUEST;
+  loading: boolean;
+}
+export interface GetWeatherSuccess {
+  type: typeof FETCH_WEATHER_SUCCESS;
+  data: WeatherData;
+  loading: boolean;
+  success: boolean;
+}
+export interface GetWeatherFail {
+  type: typeof FETCH_WEATHER_FAILED;
   loading: boolean;
   error: string;
   success: boolean;
@@ -71,7 +92,12 @@ export type DetailActionType =
   | RequestDetail
   | GetDetailSuccess
   | GetDetailFail;
+export type WeatherActionType =
+  | RequestWeather
+  | GetWeatherSuccess
+  | GetWeatherFail;
 export type ActionType =
   | InputActionType
   | AutocompleteActionType
-  | DetailActionType;
+  | DetailActionType
+  | WeatherActionType;

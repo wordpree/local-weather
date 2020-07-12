@@ -1,6 +1,11 @@
 import React, { useReducer, useContext, Dispatch } from "react";
-import { inputReducer, detailReducer, autocompleteReducer } from "./reducer";
-import { StateType, Detail } from "../type";
+import {
+  inputReducer,
+  detailReducer,
+  autocompleteReducer,
+  weatherReducer,
+} from "./reducer";
+import { StateType, Detail, WeatherData } from "../type";
 import { combineReducer } from "../util";
 
 interface ICProps {
@@ -23,6 +28,12 @@ const initialState: StateType = {
     error: "",
     success: false,
   },
+  weather: {
+    data: {} as WeatherData,
+    loading: false,
+    error: "",
+    success: false,
+  },
 };
 
 const WeatherContext = React.createContext<{
@@ -35,6 +46,7 @@ const WeatherContextProvid = ({ children }: ICProps) => {
     form: inputReducer,
     autocomplete: autocompleteReducer,
     placeDetail: detailReducer,
+    weather: weatherReducer,
   });
 
   const [state, dispatch] = useReducer(rootReducer, initialState);

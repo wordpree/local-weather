@@ -11,7 +11,7 @@ import {
   GOOGLE_PLACE_DETAIL_QUERY,
   GOOGLE_PLACE_DETAIL_PATH,
   API_KEY,
-  CORS,
+  detail,
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
 const AutocompleteList = () => {
   const classes = useStyles();
   const { state, dispatch } = useWeatherContext();
-  const type = {
-    request: TYPE.FETCH_DETAIL_REQUEST,
-    success: TYPE.FETCH_DETAIL_SUCCESS,
-    failed: TYPE.FETCH_DETAIL_FAILED,
-  };
   const { data, loading, success, error } = state.autocomplete;
   if (error) {
     return (
@@ -44,13 +39,13 @@ const AutocompleteList = () => {
     if (!listItem) return null;
     const { place_id, description } = listItem;
     const fetchUrl = getGoogleFetchUrl(
-      `${CORS}${GOOGLE_PLACE_DETAIL_PATH}`,
+      `${GOOGLE_PLACE_DETAIL_PATH}`,
       { place_id },
       GOOGLE_PLACE_DETAIL_QUERY,
       API_KEY
     );
     dispatch(actions.getInput(description, TYPE.INPUT_SEARCH));
-    hanldeDataDispatch(dispatch)(actions, fetchUrl, type);
+    hanldeDataDispatch(dispatch)(actions, fetchUrl, detail);
     dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
   };
   const renderList = (list: Prediction[]) => {

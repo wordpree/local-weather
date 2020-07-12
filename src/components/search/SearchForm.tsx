@@ -2,14 +2,20 @@ import React from "react";
 import { makeStyles, Paper, InputBase, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { useWeatherContext } from "../../stateManager/context";
-import { getGoogleFetchUrl, hanldeDataDispatch } from "../../util";
+import {
+  getGoogleFetchUrl,
+  hanldeDataDispatch,
+  getWeatherFetchUrl,
+} from "../../util";
 import * as TYPE from "../../stateManager/actionType";
 import * as actions from "../../stateManager/actions";
 import {
   GOOGLE_AUTOCOMPLETE_PATH,
-  CORS,
   API_KEY,
   GOOGLE_AUTOCOMPLETE_QUERY,
+  OPEN_WEATHER_MAP_URL,
+  weather,
+  autocomplete,
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,14 +35,16 @@ const useStyles = makeStyles((theme) => ({
 const SearchForm = () => {
   const classes = useStyles();
   const { state, dispatch } = useWeatherContext();
-  const type = {
-    request: TYPE.FETCH_AUTOCOMPLETE_REQUEST,
-    success: TYPE.FETCH_AUTOCOMPLETE_SUCCESS,
-    failed: TYPE.FETCH_AUTOCOMPLETE_FAILED,
+  const weatherUrl = getWeatherFetchUrl(
+    state.placeDetail.data,
+    OPEN_WEATHER_MAP_URL
+  );
+  const handleClick = () => {
+    hanldeDataDispatch(dispatch)(actions, weatherUrl, weather);
   };
-  const handleClick = () => {};
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
+    hanldeDataDispatch(dispatch)(actions, weatherUrl, weather);
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -53,7 +61,7 @@ const SearchForm = () => {
       dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
       dispatch(actions.clearData(TYPE.CLEAR_DETAIL));
     } else {
-      hanldeDataDispatch(dispatch)(actions, fetchUrl, type);
+      hanldeDataDispatch(dispatch)(actions, fetchUrl, autocomplete);
     }
   };
   return (
