@@ -1,22 +1,22 @@
 import React, { useRef } from "react";
 import { makeStyles, Paper, InputBase, IconButton } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
+import { Magnify } from "mdi-material-ui";
 import AutocompleteList from "./AutocompleteList";
 import { useWeatherContext } from "../../stateManager/context";
 import {
   getGoogleFetchUrl,
   dispatchWithThrottle,
   getWeatherFetchUrl,
+  makeCityInfo,
 } from "../../util";
 import * as TYPE from "../../stateManager/actionType";
 import * as actions from "../../stateManager/actions";
 import {
   GOOGLE_AUTOCOMPLETE_PATH,
-  API_KEY,
   GOOGLE_AUTOCOMPLETE_QUERY,
   OPEN_WEATHER_MAP_URL,
-  weather,
-  autocomplete,
+  weatherType,
+  autocompleteType,
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,13 +39,17 @@ const SearchForm = () => {
   const classes = useStyles();
   const inputRef = useRef<HTMLInputElement>();
   const { state, dispatch } = useWeatherContext();
+  const { input, placeDetail } = state;
   const weatherUrl = getWeatherFetchUrl(
     state.placeDetail.data,
     OPEN_WEATHER_MAP_URL
   );
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
-    dispatchWithThrottle(dispatch)(actions, weatherUrl, weather);
+    if (!input.trim() || !placeDetail.data.hasOwnProperty("photos")) return;
+    const city = makeCityInfo(placeDetail.data);
+    dispatch(actions.getCity(city, TYPE.GET_CITY));
+    dispatchWithThrottle(dispatch)(actions, weatherUrl, weatherType);
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -54,15 +58,11 @@ const SearchForm = () => {
     const fetchUrl = getGoogleFetchUrl(
       `${GOOGLE_AUTOCOMPLETE_PATH}`,
       { input },
-      GOOGLE_AUTOCOMPLETE_QUERY,
-      API_KEY
+      GOOGLE_AUTOCOMPLETE_QUERY
     );
     dispatch(actions.getInput(input, TYPE.INPUT_SEARCH));
-    if (input.trim().length === 0) {
-      dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
-      dispatch(actions.clearData(TYPE.CLEAR_DETAIL));
-    } else {
-      dispatchWithThrottle(dispatch)(actions, fetchUrl, autocomplete);
+    if (input.trim().length !== 0) {
+      dispatchWithThrottle(dispatch)(actions, fetchUrl, autocompleteType);
     }
   };
   return (
@@ -72,12 +72,12 @@ const SearchForm = () => {
           placeholder="Search your location..."
           inputProps={{ "aria-label": "search location" }}
           onChange={handleChange}
-          value={state.form.input}
+          value={state.input}
           className={classes.input}
           inputRef={inputRef}
         />
         <IconButton type="submit" aria-label="search">
-          <SearchIcon />
+          <Magnify />
         </IconButton>
       </Paper>
       <AutocompleteList inputRef={inputRef} />

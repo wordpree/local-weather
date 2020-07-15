@@ -1,15 +1,16 @@
 /**google place detail**/
-type Geometry = {
+export type Geometry = {
   lat: string;
   lng: string;
 };
-type Photo = {
+export type Photo = {
   photo_reference: string;
 };
 export interface Detail {
   geometry: {
     location: Geometry;
   };
+  name: string;
   photos: Photo[];
 }
 export type PlaceDetail = { result: Detail };
@@ -35,7 +36,7 @@ type DailyFeelsLike = {
   eve: number;
   morn: number;
 };
-type Hourly = {
+export type Hourly = {
   dt: number;
   temp: number;
   feels_like: number;
@@ -49,7 +50,7 @@ type Hourly = {
   snow?: number;
   weather: Weather[];
 };
-interface Daily extends Omit<Hourly, "temp" | "feels_like"> {
+export interface Daily extends Omit<Hourly, "temp" | "feels_like"> {
   feels_like: DailyFeelsLike;
   temp: DailyTemp;
 }
@@ -75,18 +76,26 @@ export type Prediction = {
 export type Autocomplete = { predictions: Prediction[] };
 
 /**state**/
-type Form = {
-  input: string;
+export type City = {
+  photo: Photo;
+  name: string;
 };
+
 type DataFetching<T> = {
   data: T;
   loading: boolean;
   error: "";
   success: boolean;
 };
+
+export type TAutocomplete = DataFetching<Prediction[]>;
+export type TPlaceDetail = DataFetching<Detail>;
+export type TWeather = DataFetching<WeatherData[]>;
+
 export interface StateType {
-  form: Form;
-  autocomplete: DataFetching<Prediction[]>;
-  placeDetail: DataFetching<Detail>;
-  weather: DataFetching<WeatherData>;
+  input: string;
+  city: City;
+  autocomplete: TAutocomplete;
+  placeDetail: TPlaceDetail;
+  weather: TWeather;
 }

@@ -1,8 +1,12 @@
-import { Autocomplete, PlaceDetail } from "../type";
+import { Autocomplete, PlaceDetail, City } from "../type";
 
 export const getInput = (input: string, type: string) => ({
   type,
   input,
+});
+export const getCity = (city: City, type: string) => ({
+  type,
+  city,
 });
 export const requestData = (type: string) => ({
   type,

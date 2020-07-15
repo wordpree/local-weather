@@ -10,8 +10,7 @@ import * as actions from "../../stateManager/actions";
 import {
   GOOGLE_PLACE_DETAIL_QUERY,
   GOOGLE_PLACE_DETAIL_PATH,
-  API_KEY,
-  detail,
+  detailType,
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,8 +26,9 @@ interface IAProps {
 const AutocompleteList = ({ inputRef }: IAProps) => {
   const classes = useStyles();
   const { state, dispatch } = useWeatherContext();
-  const { data, loading, success, error } = state.autocomplete;
-  if (error) {
+  const { input, autocomplete } = state;
+  const { data, loading, success, error } = autocomplete;
+  if (error && input.trim()) {
     return (
       <div>
         <p>Nothing to show. Please try another search</p>
@@ -46,12 +46,11 @@ const AutocompleteList = ({ inputRef }: IAProps) => {
     const fetchUrl = getGoogleFetchUrl(
       `${GOOGLE_PLACE_DETAIL_PATH}`,
       { place_id },
-      GOOGLE_PLACE_DETAIL_QUERY,
-      API_KEY
+      GOOGLE_PLACE_DETAIL_QUERY
     );
     dispatch(actions.getInput(description, TYPE.INPUT_SEARCH));
-    dispatchWithThrottle(dispatch)(actions, fetchUrl, detail);
     dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
+    dispatchWithThrottle(dispatch)(actions, fetchUrl, detailType);
     focusInput(inputRef);
   };
   const renderList = (list: Prediction[]) => {
@@ -73,7 +72,9 @@ const AutocompleteList = ({ inputRef }: IAProps) => {
     }
   };
   return (
-    <List className={classes.list}>{success ? renderList(data) : null}</List>
+    <List className={classes.list}>
+      {success && input.trim() ? renderList(data) : null}
+    </List>
   );
 };
 

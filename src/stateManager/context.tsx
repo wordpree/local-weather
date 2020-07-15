@@ -4,8 +4,9 @@ import {
   detailReducer,
   autocompleteReducer,
   weatherReducer,
+  cityReducer,
 } from "./reducer";
-import { StateType, Detail, WeatherData } from "../type";
+import { StateType, Detail, WeatherData, City } from "../type";
 import { combineReducer } from "../util";
 
 interface ICProps {
@@ -13,9 +14,8 @@ interface ICProps {
 }
 
 const initialState: StateType = {
-  form: {
-    input: "",
-  },
+  input: "",
+  city: {} as City,
   autocomplete: {
     data: [],
     loading: false,
@@ -29,7 +29,7 @@ const initialState: StateType = {
     success: false,
   },
   weather: {
-    data: {} as WeatherData,
+    data: [] as WeatherData[],
     loading: false,
     error: "",
     success: false,
@@ -43,7 +43,8 @@ const WeatherContext = React.createContext<{
 
 const WeatherContextProvid = ({ children }: ICProps) => {
   const rootReducer = combineReducer({
-    form: inputReducer,
+    input: inputReducer,
+    city: cityReducer,
     autocomplete: autocompleteReducer,
     placeDetail: detailReducer,
     weather: weatherReducer,
