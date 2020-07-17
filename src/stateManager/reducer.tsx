@@ -1,4 +1,5 @@
 import * as TYPE from "./actionType";
+import { defaultImg } from "../constant";
 import {
   TAutocomplete,
   TWeather,
@@ -160,12 +161,15 @@ export function pexelsReducer(state: TPexels, action: TYPE.PexelsActionType) {
       };
     case TYPE.FETCH_PEXELS_SUCCESS:
       const { data } = action as TYPE.GetPexelsSuccess;
+      let photo = defaultImg;
       const temp = {
         ...state,
         loading: false,
         success: true,
       };
-      const photo = data.photos[0].src.medium;
+      if (data.photos.length !== 0) {
+        photo = data.photos[0].src.medium;
+      }
       if (state.data.length > 2) {
         const [first, ...rest] = state.data;
         return { ...temp, data: [...rest, photo] };

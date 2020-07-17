@@ -49,12 +49,13 @@ const Banner = () => {
   const { state } = useWeatherContext();
   const handleCityId = (id: number) => setCityId(id);
   const { weather, pexels, city } = state;
+  const newSearchItem = city[city.length - 1];
   const length = weather.data.length;
   useEffect(() => {
     if (weather.success) {
       setCityId(length - 1);
     }
-  }, [length, weather.success]);
+  }, [length, weather.success, newSearchItem]);
   return (
     <Container className={classes.entry}>
       <motion.div initial="hidden" animate="visible">
