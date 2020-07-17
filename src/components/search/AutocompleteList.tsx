@@ -50,7 +50,7 @@ const AutocompleteList = ({ inputRef }: IAProps) => {
     );
     dispatch(actions.getInput(description, TYPE.INPUT_SEARCH));
     dispatch(actions.clearData(TYPE.CLEAR_AUTOCOMPLETE));
-    dispatchWithThrottle(dispatch)(actions, fetchUrl, detailType);
+    dispatchWithThrottle(dispatch)(actions, { url: fetchUrl }, detailType);
     focusInput(inputRef);
   };
   const renderList = (list: Prediction[]) => {

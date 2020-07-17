@@ -3,15 +3,15 @@ export type Geometry = {
   lat: string;
   lng: string;
 };
-export type Photo = {
-  photo_reference: string;
+export type Components = {
+  short_name: string;
+  types: string[];
 };
 export interface Detail {
   geometry: {
     location: Geometry;
   };
-  name: string;
-  photos: Photo[];
+  address_components: Components[];
 }
 export type PlaceDetail = { result: Detail };
 
@@ -53,6 +53,8 @@ export type Hourly = {
 export interface Daily extends Omit<Hourly, "temp" | "feels_like"> {
   feels_like: DailyFeelsLike;
   temp: DailyTemp;
+  sunrise: number;
+  sunset: number;
 }
 export interface Current extends Hourly {
   sunrise: number;
@@ -74,10 +76,22 @@ export type Prediction = {
   place_id: string;
 };
 export type Autocomplete = { predictions: Prediction[] };
-
+/**pexels photo search**/
+export type Photo = {
+  id: number;
+  url: string;
+  photographer: string;
+  photographer_url: string;
+  src: {
+    medium: string;
+  };
+};
+export type PexelsData = {
+  photos: Photo[];
+};
 /**state**/
 export type City = {
-  photo: Photo;
+  photo: string;
   name: string;
 };
 
@@ -91,10 +105,12 @@ type DataFetching<T> = {
 export type TAutocomplete = DataFetching<Prediction[]>;
 export type TPlaceDetail = DataFetching<Detail>;
 export type TWeather = DataFetching<WeatherData[]>;
+export type TPexels = DataFetching<string[]>;
 
 export interface StateType {
   input: string;
-  city: City;
+  city: string[];
+  pexels: TPexels;
   autocomplete: TAutocomplete;
   placeDetail: TPlaceDetail;
   weather: TWeather;

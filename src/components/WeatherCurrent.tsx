@@ -2,13 +2,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import { useWeatherContext } from "../stateManager/context";
-import { getCityInfo, sortCurrentData } from "../util";
-import defaultImg from "../assets/brisbane.jpg";
-import { defaultLocation } from "../constant";
+import { defaultImg } from "../constant";
+import { sortCurrentData } from "../util";
 import { imgBorderVariants } from "../framerMotion";
+import { Current } from "../type";
 
 type Ele = "Feels like" | "Sunset" | "Uv index";
+interface IWProps {
+  current: Current;
+  city: string;
+  timezoneOffset: number;
+}
 
 const useStyles = makeStyles((theme) => ({
   entry: {
@@ -96,13 +100,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WeatherCurrent = () => {
-  const { state } = useWeatherContext();
+const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
   const classes = useStyles();
-  const { weather, city } = state;
-  if (!weather.success) return null;
-  const weatherEle = sortCurrentData(weather.data);
-  const { imgUrl, location } = getCityInfo(city, defaultLocation, defaultImg);
+  const weatherEle = sortCurrentData(current, timezoneOffset);
   const { iconUrl, date, temp, feels_like, sunSet, uvi } = weatherEle;
   const eles = { "Feels like": feels_like, Sunset: sunSet, "Uv index": uvi };
   return (
@@ -116,7 +116,7 @@ const WeatherCurrent = () => {
         </div>
         <div>
           <motion.img
-            src={imgUrl}
+            src={defaultImg}
             className={classes.img}
             alt="city"
             variants={imgBorderVariants}
@@ -138,7 +138,7 @@ const WeatherCurrent = () => {
           </Typography>
         </div>
         <Typography variant="body2" className={classes.location}>
-          {location}
+          {city}
         </Typography>
         <div className={classes.eles}>
           {Object.keys(eles).map((k) => (

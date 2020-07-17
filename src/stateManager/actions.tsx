@@ -1,10 +1,10 @@
-import { Autocomplete, PlaceDetail, City } from "../type";
+import { Autocomplete, PlaceDetail, PexelsData } from "../type";
 
 export const getInput = (input: string, type: string) => ({
   type,
   input,
 });
-export const getCity = (city: City, type: string) => ({
+export const getCity = (city: string, type: string) => ({
   type,
   city,
 });
@@ -12,7 +12,7 @@ export const requestData = (type: string) => ({
   type,
 });
 export const getDataSuccess = (
-  data: Autocomplete | PlaceDetail,
+  data: Autocomplete | PlaceDetail | PexelsData[],
   type: string
 ) => ({
   type,

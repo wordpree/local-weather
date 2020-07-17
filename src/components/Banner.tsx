@@ -1,29 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { dispatchWithThrottle } from "../util";
 import { Container, makeStyles, Grid } from "@material-ui/core";
-import SearchForm from "./search";
 import cloud from "../assets/cloud.svg";
-import WeatherDay from "./WeatherDay";
+import WeatherDay from "./WeatherDayList";
+import WeatherCityList from "./WeatherCityList";
+import Search from "./search";
 import WeatherCurrent from "./WeatherCurrent";
 import WeatherHour from "./WeatherHour";
 import { useWeatherContext } from "../stateManager/context";
-import * as actions from "../stateManager/actions";
-import { weatherType, OPEN_WEATHER_MAP_URL } from "../constant";
-import { WeatherData } from "../type";
-import {
-  searchVariants,
-  cloud1Variants,
-  cloud2Variants,
-} from "../framerMotion";
+import { cloud1Variants, cloud2Variants } from "../framerMotion";
 
 const useStyles = makeStyles((theme) => ({
   entry: {
     marginTop: "3rem",
   },
-  right: {
-    height: 500,
-    background: "#F2F2F2",
+  left: {
+    background: "#F2FBFF",
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12,
   },
@@ -31,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem 0.25rem",
     marginTop: "2rem",
   },
-  left: {
+  right: {
     overflow: "hidden",
     position: "relative",
     background: "#332C62",
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
     "& >div >img ": {
       maxWidth: 160,
       position: "absolute",
@@ -47,25 +39,42 @@ const useStyles = makeStyles((theme) => ({
     right: -60,
   },
   img2: {
-    bottom: "30%",
+    bottom: "5%",
     left: -60,
   },
 }));
 const Banner = () => {
   const classes = useStyles();
-  const [weather, setWeather] = useState({} as WeatherData);
-  const { dispatch } = useWeatherContext();
+  const [cityId, setCityId] = useState(0);
+  const { state } = useWeatherContext();
+  const handleCityId = (id: number) => setCityId(id);
+  const { weather, pexels, city } = state;
+  const length = weather.data.length;
   useEffect(() => {
-    const weatherUrl =
-      OPEN_WEATHER_MAP_URL + "&lat=-27.4697707&lon=153.0251235";
-    dispatchWithThrottle(dispatch)(actions, weatherUrl, weatherType);
-  }, [dispatch]);
+    if (weather.success) {
+      setCityId(length - 1);
+    }
+  }, [length, weather.success]);
   return (
     <Container className={classes.entry}>
       <motion.div initial="hidden" animate="visible">
         <Grid container>
-          <Grid className={classes.left} item xs={12} md={5}>
-            <motion.div>
+          <Grid className={classes.left} item xs={12} md={7}>
+            <Search />
+            <WeatherCityList
+              city={city}
+              photo={pexels}
+              handleCityId={handleCityId}
+            />
+            {weather.success && (
+              <WeatherDay
+                day={weather.data[cityId].daily}
+                timezoneOffset={weather.data[cityId].timezone_offset}
+              />
+            )}
+          </Grid>
+          <Grid className={classes.right} item xs={12} md={5}>
+            <div>
               <motion.img
                 variants={cloud1Variants}
                 src={cloud}
@@ -78,18 +87,20 @@ const Banner = () => {
                 alt="cloud"
                 className={classes.img2}
               />
-            </motion.div>
-            <WeatherCurrent />
-            <WeatherHour />
-          </Grid>
-          <Grid className={classes.right} item xs={12} md={7}>
-            <motion.div
-              variants={searchVariants}
-              className={classes.searchContainer}
-            >
-              <SearchForm />
-            </motion.div>
-            <WeatherDay />
+            </div>
+            {weather.success && (
+              <>
+                <WeatherCurrent
+                  current={weather.data[cityId].current}
+                  city={city[cityId]}
+                  timezoneOffset={weather.data[cityId].timezone_offset}
+                />
+                <WeatherHour
+                  hour={weather.data[cityId].hourly}
+                  timezoneOffset={weather.data[cityId].timezone_offset}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
       </motion.div>

@@ -1,6 +1,8 @@
 import React from "react";
 import Layout from "./components/Layout";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { WeatherContextProvid } from "./stateManager/context";
+
 function App() {
   const theme = createMuiTheme({
     typography: {
@@ -16,7 +18,9 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <Layout />
+        <WeatherContextProvid>
+          <Layout />
+        </WeatherContextProvid>
       </ThemeProvider>
     </div>
   );

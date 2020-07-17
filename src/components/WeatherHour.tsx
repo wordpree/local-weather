@@ -1,15 +1,15 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { useWeatherContext } from "../stateManager/context";
 import { getDateHourly } from "../util";
+import { Hourly } from "../type";
 
-const WeatherHour = () => {
-  const { state } = useWeatherContext();
-  const { weather } = state;
-  if (!weather.success) return null;
-  const { data, time } = getDateHourly(
-    weather.data[weather.data.length - 1].hourly
-  );
+interface IWPorps {
+  hour: Hourly[];
+  timezoneOffset: number;
+}
+
+const WeatherHour = ({ hour, timezoneOffset }: IWPorps) => {
+  const { data, time } = getDateHourly(hour, timezoneOffset);
   const options = {
     legend: {
       labels: {
@@ -65,8 +65,8 @@ const WeatherHour = () => {
     ],
   };
   return (
-    <div style={{ padding: "2rem 0" }}>
-      <Line data={chart} options={options} />
+    <div style={{ paddingTop: "2rem" }}>
+      <Line data={chart} options={options} height={240} />
     </div>
   );
 };

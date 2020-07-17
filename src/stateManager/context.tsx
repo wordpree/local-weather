@@ -1,13 +1,8 @@
 import React, { useReducer, useContext, Dispatch } from "react";
-import {
-  inputReducer,
-  detailReducer,
-  autocompleteReducer,
-  weatherReducer,
-  cityReducer,
-} from "./reducer";
-import { StateType, Detail, WeatherData, City } from "../type";
+import * as reducer from "./reducer";
+import { StateType, Detail } from "../type";
 import { combineReducer } from "../util";
+import { defaultLocation, defaultImg } from "../constant";
 
 interface ICProps {
   children: React.ReactNode;
@@ -15,7 +10,13 @@ interface ICProps {
 
 const initialState: StateType = {
   input: "",
-  city: {} as City,
+  city: [defaultLocation],
+  pexels: {
+    data: [defaultImg],
+    loading: false,
+    error: "",
+    success: false,
+  },
   autocomplete: {
     data: [],
     loading: false,
@@ -29,7 +30,7 @@ const initialState: StateType = {
     success: false,
   },
   weather: {
-    data: [] as WeatherData[],
+    data: [],
     loading: false,
     error: "",
     success: false,
@@ -43,11 +44,12 @@ const WeatherContext = React.createContext<{
 
 const WeatherContextProvid = ({ children }: ICProps) => {
   const rootReducer = combineReducer({
-    input: inputReducer,
-    city: cityReducer,
-    autocomplete: autocompleteReducer,
-    placeDetail: detailReducer,
-    weather: weatherReducer,
+    input: reducer.inputReducer,
+    city: reducer.cityReducer,
+    pexels: reducer.pexelsReducer,
+    autocomplete: reducer.autocompleteReducer,
+    placeDetail: reducer.detailReducer,
+    weather: reducer.weatherReducer,
   });
 
   const [state, dispatch] = useReducer(rootReducer, initialState);

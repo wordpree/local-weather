@@ -7,7 +7,7 @@ import {
   getGoogleFetchUrl,
   dispatchWithThrottle,
   getWeatherFetchUrl,
-  makeCityInfo,
+  getAddressByDet,
 } from "../../util";
 import * as TYPE from "../../stateManager/actionType";
 import * as actions from "../../stateManager/actions";
@@ -17,17 +17,19 @@ import {
   OPEN_WEATHER_MAP_URL,
   weatherType,
   autocompleteType,
+  pexelsType,
+  PEXELS_QUERY,
+  PEXELS_PARA,
 } from "../../constant";
 
 const useStyles = makeStyles((theme) => ({
-  entry: {
-    marginLeft: "2rem",
-  },
+  entry: {},
   root: {
     display: "flex",
     alignItems: "center",
     padding: "3px 6px",
-    width: 440,
+    maxWidth: 640,
+    margin: "0 auto",
   },
   input: {
     marginLeft: "0.5rem",
@@ -46,10 +48,17 @@ const SearchForm = () => {
   );
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (!input.trim() || !placeDetail.data.hasOwnProperty("photos")) return;
-    const city = makeCityInfo(placeDetail.data);
+    if (!input.trim() || !placeDetail.data.hasOwnProperty("address_components"))
+      return;
+    const city = getAddressByDet(placeDetail.data);
+    const pexelsUrl = PEXELS_QUERY + city;
     dispatch(actions.getCity(city, TYPE.GET_CITY));
-    dispatchWithThrottle(dispatch)(actions, weatherUrl, weatherType);
+    dispatchWithThrottle(dispatch)(actions, { url: weatherUrl }, weatherType);
+    dispatchWithThrottle(dispatch)(
+      actions,
+      { url: pexelsUrl, para: { ...PEXELS_PARA } },
+      pexelsType
+    );
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -62,12 +71,21 @@ const SearchForm = () => {
     );
     dispatch(actions.getInput(input, TYPE.INPUT_SEARCH));
     if (input.trim().length !== 0) {
-      dispatchWithThrottle(dispatch)(actions, fetchUrl, autocompleteType);
+      dispatchWithThrottle(dispatch)(
+        actions,
+        { url: fetchUrl },
+        autocompleteType
+      );
     }
   };
   return (
     <div className={classes.entry}>
-      <Paper component="form" onSubmit={handleSubmit} className={classes.root}>
+      <Paper
+        component="form"
+        onSubmit={handleSubmit}
+        className={classes.root}
+        elevation={0}
+      >
         <InputBase
           placeholder="Search your location..."
           inputProps={{ "aria-label": "search location" }}

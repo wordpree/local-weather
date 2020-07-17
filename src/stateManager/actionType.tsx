@@ -1,4 +1,4 @@
-import { Autocomplete, PlaceDetail, WeatherData, City } from "../type";
+import { Autocomplete, PlaceDetail, WeatherData, PexelsData } from "../type";
 
 export const GET_CITY = "GET_CITY";
 export const INPUT_SEARCH = "INPUT_SEARCH";
@@ -12,16 +12,19 @@ export const FETCH_DETAIL_REQUEST = "FETCH_DETAIL_REQUEST";
 export const FETCH_WEATHER_REQUEST = "FETCH_WEATHER_REQUEST";
 export const FETCH_WEATHER_SUCCESS = "FETCH_WEATHER_SUCCESS";
 export const FETCH_WEATHER_FAILED = "FETCH_WEATHER_FAILED";
+export const FETCH_PEXELS_REQUEST = "FETCH_PEXELS_REQUEST";
+export const FETCH_PEXELS_SUCCESS = "FETCH_PEXELS_SUCCESS";
+export const FETCH_PEXELS_FAILED = "FETCH_PEXELS_FAILED";
 
 //form input
 export interface Input {
   type: typeof INPUT_SEARCH;
   input: string;
 }
-//get place detail photo
-export interface CityInfo {
+//get place detail location
+export interface Location {
   type: typeof GET_CITY;
-  city: City;
+  city: string;
 }
 //google place api autocomplete
 export interface RequestAutocomplete {
@@ -81,8 +84,26 @@ export interface GetWeatherFail {
   success: boolean;
 }
 
+//pexels api
+export interface RequestPexels {
+  type: typeof FETCH_PEXELS_REQUEST;
+  loading: boolean;
+}
+export interface GetPexelsSuccess {
+  type: typeof FETCH_PEXELS_SUCCESS;
+  data: PexelsData;
+  loading: boolean;
+  success: boolean;
+}
+export interface GetPexelsFail {
+  type: typeof FETCH_PEXELS_FAILED;
+  loading: boolean;
+  error: string;
+  success: boolean;
+}
+
 export type InputActionType = Input;
-export type CityActionType = CityInfo;
+export type CityActionType = Location;
 export type AutocompleteActionType =
   | RequestAutocomplete
   | GetAutocompleteSuccess
@@ -93,9 +114,11 @@ export type WeatherActionType =
   | RequestWeather
   | GetWeatherSuccess
   | GetWeatherFail;
+export type PexelsActionType = RequestPexels | GetPexelsSuccess | GetPexelsFail;
 export type ActionType =
   | InputActionType
   | CityActionType
   | AutocompleteActionType
   | DetailActionType
-  | WeatherActionType;
+  | WeatherActionType
+  | PexelsActionType;

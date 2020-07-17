@@ -5,15 +5,19 @@ import {
   TPlaceDetail,
   Autocomplete,
   PlaceDetail,
-  City,
+  TPexels,
 } from "../type";
 
 //single reducer rather focuses on the being changed value inside the whole state
-export function cityReducer(state: City, action: TYPE.CityActionType) {
+export function cityReducer(state: string[], action: TYPE.CityActionType) {
   const { city, type } = action as TYPE.CityActionType;
   switch (type) {
     case TYPE.GET_CITY:
-      return city;
+      if (state.length > 2) {
+        const [first, ...rest] = state;
+        return [...rest, city];
+      }
+      return [...state, city];
     default:
       return state;
   }
@@ -133,6 +137,45 @@ export function weatherReducer(
       };
     case TYPE.FETCH_WEATHER_FAILED:
       const { error } = action as TYPE.GetWeatherFail;
+      return {
+        ...state,
+        error,
+        success: false,
+        loading: false,
+        data: {},
+      };
+    default:
+      return state;
+  }
+}
+
+export function pexelsReducer(state: TPexels, action: TYPE.PexelsActionType) {
+  const { type } = action;
+  switch (type) {
+    case TYPE.FETCH_PEXELS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: "",
+      };
+    case TYPE.FETCH_PEXELS_SUCCESS:
+      const { data } = action as TYPE.GetPexelsSuccess;
+      const temp = {
+        ...state,
+        loading: false,
+        success: true,
+      };
+      const photo = data.photos[0].src.medium;
+      if (state.data.length > 2) {
+        const [first, ...rest] = state.data;
+        return { ...temp, data: [...rest, photo] };
+      }
+      return {
+        ...temp,
+        data: [...state.data, photo],
+      };
+    case TYPE.FETCH_PEXELS_FAILED:
+      const { error } = action as TYPE.GetPexelsFail;
       return {
         ...state,
         error,
