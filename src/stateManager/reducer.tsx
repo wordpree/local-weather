@@ -143,7 +143,7 @@ export function weatherReducer(
         error,
         success: false,
         loading: false,
-        data: {},
+        data: [],
       };
     default:
       return state;
@@ -185,7 +185,7 @@ export function pexelsReducer(state: TPexels, action: TYPE.PexelsActionType) {
         error,
         success: false,
         loading: false,
-        data: {},
+        data: [],
       };
     default:
       return state;

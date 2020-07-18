@@ -51,7 +51,7 @@ const SearchForm = () => {
     if (!input.trim() || !placeDetail.data.hasOwnProperty("address_components"))
       return;
     const city = getAddressByDet(placeDetail.data);
-    const pexelsUrl = PEXELS_QUERY + city + "nature";
+    const pexelsUrl = PEXELS_QUERY + city;
     dispatch(actions.getCity(city, TYPE.GET_CITY));
     dispatchWithThrottle(dispatch)(actions, { url: weatherUrl }, weatherType);
     dispatchWithThrottle(dispatch)(

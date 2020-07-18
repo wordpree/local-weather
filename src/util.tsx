@@ -27,7 +27,7 @@ export function getGoogleFetchUrl(
 }
 
 export function validation(response: Response) {
-  if (response.statusText !== "OK") {
+  if (!response.ok) {
     throw Error(`error-->${response.status}:${response.statusText}`);
   }
 }
