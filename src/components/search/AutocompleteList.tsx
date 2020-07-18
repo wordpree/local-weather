@@ -16,6 +16,7 @@ import {
 const useStyles = makeStyles((theme) => ({
   list: {
     maxWidth: "80%",
+    color: "#fff",
   },
 }));
 type InputRef = React.MutableRefObject<HTMLInputElement | undefined>;

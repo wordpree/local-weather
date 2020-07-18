@@ -1,5 +1,10 @@
 import React from "react";
-import { ListItem, makeStyles, Typography } from "@material-ui/core";
+import {
+  ListItem,
+  makeStyles,
+  Typography,
+  useMediaQuery,
+} from "@material-ui/core";
 import {
   WeatherSunset,
   WeatherWindy,
@@ -46,7 +51,16 @@ const useStyles = makeStyles({
 const WeatherDay = ({ day, offset }: IWDProps) => {
   const classes = useStyles();
   const icon = [WaterPercent, TemperatureCelsius, WeatherWindy, WeatherSunset];
+  const md = useMediaQuery("(min-width:500px)");
+  const min = day.temp.min;
+  const max = day.temp.max;
+  const humidity = day.humidity;
   const ret = getWeatherEle(day, offset, icon);
+  const smRet = [
+    { value: humidity + "%", icon: icon[0] },
+    { value: `${min} - ${max}`, icon: icon[1] },
+  ];
+  const elements = md ? ret : smRet;
   const weekday = getWeekday(day.dt);
   const weatherIcon = getSmWeatherIcon(day.weather[0].icon);
   return (
@@ -56,10 +70,10 @@ const WeatherDay = ({ day, offset }: IWDProps) => {
         <li>
           <img src={weatherIcon} className={classes.weather} alt="weather" />
         </li>
-        {ret.map((r) => (
-          <li key={r.value} className={classes.wrapper}>
-            <Typography component="span">{r.value}</Typography>
-            <r.icon className={classes.icon} />
+        {elements.map((e) => (
+          <li key={e.value} className={classes.wrapper}>
+            <Typography component="span">{e.value}</Typography>
+            <e.icon className={classes.icon} />
           </li>
         ))}
       </ul>

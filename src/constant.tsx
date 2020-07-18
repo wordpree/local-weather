@@ -13,7 +13,7 @@ export const GOOGLE_PLACE_DETAIL_PATH = `${GOOGLE_PLACE_URL}details/json`;
 export const GOOGLE_PLACE_DETAIL_QUERY = `fields=geometry,address_component&key=${G_API_KEY}`;
 export const GOOGLE_AUTOCOMPLETE_QUERY = `types=(regions)&key=${G_API_KEY}`;
 export const OPEN_WEATHER_MAP_URL = `https://api.openweathermap.org/data/2.5/onecall?exclude=minutely&units=metric&appid=${W_API_KEY}`;
-export const defaultLocation = "Brisbane City,Australia";
+export const defaultLocation = "Brisbane City,Au";
 export const defaultImg = image;
 export const autocompleteType = {
   request: TYPE.FETCH_AUTOCOMPLETE_REQUEST,

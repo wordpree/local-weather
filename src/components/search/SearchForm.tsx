@@ -51,7 +51,7 @@ const SearchForm = () => {
     if (!input.trim() || !placeDetail.data.hasOwnProperty("address_components"))
       return;
     const city = getAddressByDet(placeDetail.data);
-    const pexelsUrl = PEXELS_QUERY + city;
+    const pexelsUrl = PEXELS_QUERY + city + "nature";
     dispatch(actions.getCity(city, TYPE.GET_CITY));
     dispatchWithThrottle(dispatch)(actions, { url: weatherUrl }, weatherType);
     dispatchWithThrottle(dispatch)(
@@ -59,6 +59,7 @@ const SearchForm = () => {
       { url: pexelsUrl, para: { ...PEXELS_PARA } },
       pexelsType
     );
+    dispatch(actions.getInput("", TYPE.INPUT_SEARCH));
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>

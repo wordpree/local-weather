@@ -134,7 +134,7 @@ export function getDateHourly(hourly: Hourly[], timezone: number) {
   return { time: dt, data: temp };
 }
 
-export function interNumber(input: number) {
+export function intNumber(input: number) {
   return Math.floor(input + 0.5);
 }
 
@@ -148,7 +148,7 @@ export function getWeatherEle(daily: Daily, timezone: number, icon: any) {
     getDateTime(sunset * 1000 + offset);
   return [
     { value: humidity + "%", icon: icon[0] },
-    { value: interNumber(day), icon: icon[1] },
+    { value: intNumber(day), icon: icon[1] },
     { value: wind_speed, icon: icon[2] },
     { value: sun, icon: icon[3] },
   ];

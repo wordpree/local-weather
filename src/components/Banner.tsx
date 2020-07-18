@@ -14,24 +14,26 @@ const useStyles = makeStyles((theme) => ({
   entry: {
     marginTop: "3rem",
   },
-  left: {
+  right: {
     background: "#F2FBFF",
-    borderTopLeftRadius: 12,
-    borderBottomLeftRadius: 12,
   },
   searchContainer: {
     padding: "1rem 0.25rem",
     marginTop: "2rem",
   },
-  right: {
+  left: {
     overflow: "hidden",
     position: "relative",
     background: "#332C62",
+    borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
-    borderBottomRightRadius: 12,
     "& >div >img ": {
       maxWidth: 160,
       position: "absolute",
+    },
+    [theme.breakpoints.up(960)]: {
+      borderRadius: 0,
+      borderTopLeftRadius: 12,
     },
   },
   img1: {
@@ -60,21 +62,7 @@ const Banner = () => {
     <Container className={classes.entry}>
       <motion.div initial="hidden" animate="visible">
         <Grid container>
-          <Grid className={classes.left} item xs={12} md={7}>
-            <Search />
-            <WeatherCityList
-              city={city}
-              photo={pexels}
-              handleCityId={handleCityId}
-            />
-            {weather.success && (
-              <WeatherDay
-                day={weather.data[cityId].daily}
-                timezoneOffset={weather.data[cityId].timezone_offset}
-              />
-            )}
-          </Grid>
-          <Grid className={classes.right} item xs={12} md={5}>
+          <Grid className={classes.left} item xs={12} md={5}>
             <div>
               <motion.img
                 variants={cloud1Variants}
@@ -89,6 +77,7 @@ const Banner = () => {
                 className={classes.img2}
               />
             </div>
+            <Search />
             {weather.success && (
               <>
                 <WeatherCurrent
@@ -101,6 +90,19 @@ const Banner = () => {
                   timezoneOffset={weather.data[cityId].timezone_offset}
                 />
               </>
+            )}
+          </Grid>
+          <Grid className={classes.right} item xs={12} md={7}>
+            <WeatherCityList
+              city={city}
+              photo={pexels}
+              handleCityId={handleCityId}
+            />
+            {weather.success && (
+              <WeatherDay
+                day={weather.data[cityId].daily}
+                timezoneOffset={weather.data[cityId].timezone_offset}
+              />
             )}
           </Grid>
         </Grid>
