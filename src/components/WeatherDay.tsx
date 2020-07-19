@@ -23,6 +23,8 @@ interface IWDProps {
 const useStyles = makeStyles({
   item: {
     borderBottom: "1px dashed #d0d0d0",
+    paddingTop: "1rem",
+    paddingBottom: "1rem",
     "&:last-child": {
       border: "none",
     },

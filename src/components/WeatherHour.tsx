@@ -66,7 +66,7 @@ const WeatherHour = ({ hour, timezoneOffset }: IWPorps) => {
   };
   return (
     <div style={{ paddingTop: "2rem" }}>
-      <Line data={chart} options={options} height={200} />
+      <Line data={chart} options={options} height={220} />
     </div>
   );
 };

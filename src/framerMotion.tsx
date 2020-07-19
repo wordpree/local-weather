@@ -56,3 +56,17 @@ export const cloud2Variants = {
     },
   },
 };
+
+export const logoVariants = {
+  hidden: {
+    rotate: 0,
+  },
+  visible: {
+    rotate: [90, -90, -45, 45, 0],
+    transition: {
+      stiffness: 500,
+      type: "spring",
+      duration: 3,
+    },
+  },
+};

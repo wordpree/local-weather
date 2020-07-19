@@ -1,13 +1,19 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { Paper, makeStyles, Typography } from "@material-ui/core";
+import { motion, useCycle } from "framer-motion";
+import { Paper, makeStyles, Typography, Button } from "@material-ui/core";
+import { Menu } from "mdi-material-ui";
 import logo from "../assets/drop.svg";
+import { logoVariants } from "../framerMotion";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: "0.75rem 0.25rem",
+    padding: "1rem",
+    [theme.breakpoints.up(768)]: {
+      justifyContent: "center",
+    },
   },
   logoWrapper: {
     borderRadius: "50%",
@@ -16,29 +22,27 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "2.5rem",
   },
   logo: {
-    maxWidth: 48,
+    maxWidth: 40,
   },
   title: {
-    color: "#54499E",
-    fontWeight: "bold",
+    display: "none",
+    [theme.breakpoints.up(768)]: {
+      display: "inline-block",
+      color: "#54499E",
+      fontWeight: "bold",
+    },
+  },
+  menu: {
+    display: "inherit",
+    [theme.breakpoints.up(768)]: {
+      display: "none",
+    },
   },
 }));
 
 const Header = () => {
   const classes = useStyles();
-  const logoVariants = {
-    hidden: {
-      rotate: 0,
-    },
-    visible: {
-      rotate: [90, -90, -45, 45, 0],
-      transition: {
-        stiffness: 500,
-        type: "spring",
-        duration: 3,
-      },
-    },
-  };
+  const [y, yCycle] = useCycle(0, 12, -12);
   return (
     <Paper className={classes.paper}>
       <motion.div className={classes.logoWrapper}>
@@ -54,6 +58,11 @@ const Header = () => {
       <Typography variant="h3" className={classes.title}>
         A simple weather forecast website
       </Typography>
+      <motion.div onTap={() => yCycle()} animate={{ y, rotate: y }}>
+        <Button className={classes.menu}>
+          <Menu />
+        </Button>
+      </motion.div>
     </Paper>
   );
 };

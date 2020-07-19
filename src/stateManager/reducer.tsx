@@ -1,5 +1,6 @@
 import * as TYPE from "./actionType";
 import { defaultImg } from "../constant";
+import { arrayStack } from "../util";
 import {
   TAutocomplete,
   TWeather,
@@ -14,11 +15,7 @@ export function cityReducer(state: string[], action: TYPE.CityActionType) {
   const { city, type } = action as TYPE.CityActionType;
   switch (type) {
     case TYPE.GET_CITY:
-      if (state.length > 2) {
-        const [first, ...rest] = state;
-        return [...rest, city];
-      }
-      return [...state, city];
+      return arrayStack(state, city);
     default:
       return state;
   }
@@ -123,18 +120,11 @@ export function weatherReducer(
       };
     case TYPE.FETCH_WEATHER_SUCCESS:
       const { data } = action as TYPE.GetWeatherSuccess;
-      const temp = {
+      return {
         ...state,
+        data: arrayStack(state.data, data),
         loading: false,
         success: true,
-      };
-      if (state.data.length > 2) {
-        const [first, ...rest] = state.data;
-        return { ...temp, data: [...rest, data] };
-      }
-      return {
-        ...temp,
-        data: [...state.data, data],
       };
     case TYPE.FETCH_WEATHER_FAILED:
       const { error } = action as TYPE.GetWeatherFail;
@@ -162,21 +152,14 @@ export function pexelsReducer(state: TPexels, action: TYPE.PexelsActionType) {
     case TYPE.FETCH_PEXELS_SUCCESS:
       const { data } = action as TYPE.GetPexelsSuccess;
       let photo = defaultImg;
-      const temp = {
-        ...state,
-        loading: false,
-        success: true,
-      };
       if (data.photos.length !== 0) {
         photo = data.photos[0].src.medium;
       }
-      if (state.data.length > 2) {
-        const [first, ...rest] = state.data;
-        return { ...temp, data: [...rest, photo] };
-      }
       return {
-        ...temp,
-        data: [...state.data, photo],
+        ...state,
+        data: arrayStack(state.data, photo),
+        loading: false,
+        success: true,
       };
     case TYPE.FETCH_PEXELS_FAILED:
       const { error } = action as TYPE.GetPexelsFail;

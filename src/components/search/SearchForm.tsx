@@ -41,15 +41,14 @@ const SearchForm = () => {
   const classes = useStyles();
   const inputRef = useRef<HTMLInputElement>();
   const { state, dispatch } = useWeatherContext();
-  const { input, placeDetail } = state;
+  const { input, placeDetail, autocomplete } = state;
   const weatherUrl = getWeatherFetchUrl(
     state.placeDetail.data,
     OPEN_WEATHER_MAP_URL
   );
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (!input.trim() || !placeDetail.data.hasOwnProperty("address_components"))
-      return;
+    if (!input.trim() || placeDetail.loading || autocomplete.loading) return;
     const city = getAddressByDet(placeDetail.data);
     const pexelsUrl = PEXELS_QUERY + city;
     dispatch(actions.getCity(city, TYPE.GET_CITY));

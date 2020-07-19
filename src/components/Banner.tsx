@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     "& >div >img ": {
       maxWidth: 160,
       position: "absolute",
+      [theme.breakpoints.down("sm")]: {
+        maxWidth: 80,
+      },
     },
     [theme.breakpoints.up(960)]: {
       borderRadius: 0,
@@ -37,12 +40,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   img1: {
-    top: "20%",
+    top: "30%",
     right: -60,
+    [theme.breakpoints.down("sm")]: {
+      right: -40,
+    },
   },
   img2: {
     bottom: "5%",
     left: -60,
+    [theme.breakpoints.down("sm")]: {
+      left: -40,
+    },
   },
 }));
 const Banner = () => {

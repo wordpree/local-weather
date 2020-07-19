@@ -170,3 +170,11 @@ export function getWeekday(dt: number) {
     weekday: "short",
   });
 }
+
+export function arrayStack(arr: any[], insert: any) {
+  const temp = [...arr, insert];
+  if (arr.length > 2) {
+    temp.shift();
+  }
+  return temp;
+}
