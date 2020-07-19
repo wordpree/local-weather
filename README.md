@@ -5,10 +5,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `Data comsuming resources`
+### Weather forcast
 
-Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Pexels](https://www.pexels.com/)
+Real time | Hourly | Daily
+Switch back and forth for the latest three locations of weather details.
 
-### `CORS`
+### Data comsuming resources
 
-**Note:In order to avoid being block by Google place API, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/)**
+Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Pexels](https://www.pexels.com/).
+
+### CORS
+
+**Note:In order to avoid being block by Google place API, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/).**
