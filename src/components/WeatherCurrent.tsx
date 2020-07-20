@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 import { defaultImg } from "../constant";
 import { sortCurrentData } from "../util";
-import { imgBorderVariants } from "../framerMotion";
+import { imgBorderVariants, infoVariants } from "../framerMotion";
 import { Current } from "../type";
 
 type Ele = "Feels like" | "Sunset" | "Uv index";
@@ -102,17 +102,30 @@ const useStyles = makeStyles((theme) => ({
 
 const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
   const weatherEle = sortCurrentData(current, timezoneOffset);
-  const { iconUrl, date, temp, feels_like, sunSet, uvi } = weatherEle;
+  const {
+    iconUrl,
+    date,
+    temp,
+    feels_like,
+    sunSet,
+    uvi,
+    description,
+  } = weatherEle;
   const eles = { "Feels like": feels_like, Sunset: sunSet, "Uv index": uvi };
+  const handleClick = () => setOpen((prev) => !prev);
   return (
     <motion.div className={classes.entry} initial="hidden" animate="visible">
       <div className={classes.header}>
         <div className={classes.info}>
           <Typography component="span">conditions</Typography>
-          <IconButton className={classes.btn}>
-            <ArrowDropDownIcon />
+          <IconButton className={classes.btn} onClick={handleClick}>
+            {open ? <ArrowDropUp /> : <ArrowDropDown />}
           </IconButton>
+          {open && (
+            <motion.span variants={infoVariants}>{description}</motion.span>
+          )}
         </div>
         <div>
           <motion.img

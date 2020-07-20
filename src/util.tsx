@@ -109,11 +109,11 @@ export function getSmWeatherIcon(icon: string) {
 export function sortCurrentData(data: Current, timezone: number) {
   const { temp, feels_like, uvi, sunset, weather, dt } = data;
   const offset = (new Date().getTimezoneOffset() * 60 + timezone) * 1000;
-  const icon = weather[0].icon;
+  const { icon, description } = weather[0];
   const iconUrl = getWeatherIcon(icon);
   const sunSet = getDateTime(sunset * 1000 + offset);
   const date = new Date(dt * 1000 + offset).toDateString();
-  return { iconUrl, date, temp, feels_like, sunSet, uvi };
+  return { iconUrl, date, temp, feels_like, sunSet, uvi, description };
 }
 
 export function getDateTime(timestamp: number) {

@@ -70,3 +70,15 @@ export const logoVariants = {
     },
   },
 };
+
+export const infoVariants = {
+  hidden: {
+    opacity: 0,
+    x: -40,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1.08,
+    x: 30,
+  },
+};
