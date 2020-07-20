@@ -74,11 +74,11 @@ export const logoVariants = {
 export const infoVariants = {
   hidden: {
     opacity: 0,
-    x: -40,
+    y: -40,
   },
   visible: {
     opacity: 1,
     scale: 1.1,
-    x: 30,
+    y: 6,
   },
 };

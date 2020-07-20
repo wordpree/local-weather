@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
-import { ArrowLeft, ArrowRight } from "@material-ui/icons";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 import { defaultImg } from "../constant";
 import { sortCurrentData } from "../util";
 import { imgBorderVariants, infoVariants } from "../framerMotion";
@@ -24,10 +24,19 @@ const useStyles = makeStyles((theme) => ({
     padding: "2rem",
     justifyContent: "space-between",
   },
+  infoWrapper: {
+    position: "relative",
+  },
   info: {
     display: "flex",
     alignItems: "center",
     color: "#fff",
+  },
+  des: {
+    display: "inline-block",
+    color: "#fff",
+    position: "absolute",
+    padding: "0.25rem 0.75rem",
   },
   btn: {
     color: "#cecece",
@@ -118,13 +127,19 @@ const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
   return (
     <motion.div className={classes.entry} initial="hidden" animate="visible">
       <div className={classes.header}>
-        <div className={classes.info}>
-          <Typography component="span">conditions</Typography>
-          <IconButton className={classes.btn} onClick={handleClick}>
-            {open ? <ArrowLeft /> : <ArrowRight />}
-          </IconButton>
+        <div className={classes.infoWrapper}>
+          <div className={classes.info}>
+            <Typography component="span">conditions</Typography>
+            <IconButton className={classes.btn} onClick={handleClick}>
+              {open ? <ArrowDropUp /> : <ArrowDropDown />}
+            </IconButton>
+          </div>
           {open && (
-            <motion.span variants={infoVariants}>{description}</motion.span>
+            <motion.div variants={infoVariants} className={classes.des}>
+              <Typography component="span" variant="body2">
+                {description}
+              </Typography>
+            </motion.div>
           )}
         </div>
         <div>
