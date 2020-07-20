@@ -20,6 +20,7 @@ export const searchVariants = {
     y: 0,
     opacity: 1,
     transition: {
+      delay: 2,
       type: "spring",
       easeIn: "easeInOut",
       stiffness: 100,
