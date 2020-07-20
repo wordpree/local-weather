@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
-import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
+import { ArrowLeft, ArrowRight } from "@material-ui/icons";
 import { defaultImg } from "../constant";
 import { sortCurrentData } from "../util";
 import { imgBorderVariants, infoVariants } from "../framerMotion";
@@ -121,7 +121,7 @@ const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
         <div className={classes.info}>
           <Typography component="span">conditions</Typography>
           <IconButton className={classes.btn} onClick={handleClick}>
-            {open ? <ArrowDropUp /> : <ArrowDropDown />}
+            {open ? <ArrowLeft /> : <ArrowRight />}
           </IconButton>
           {open && (
             <motion.span variants={infoVariants}>{description}</motion.span>

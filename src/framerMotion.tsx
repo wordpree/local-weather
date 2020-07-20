@@ -78,7 +78,7 @@ export const infoVariants = {
   },
   visible: {
     opacity: 1,
-    scale: 1.08,
+    scale: 1.1,
     x: 30,
   },
 };
