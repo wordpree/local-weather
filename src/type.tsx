@@ -63,11 +63,15 @@ export interface Current extends Hourly {
   visibility: number;
 }
 
-export interface WeatherData {
+export interface IWeatherData {
   timezone_offset: number;
   current: Current;
   daily: Daily[];
   hourly: Hourly[];
+}
+
+export interface IWeatherDataWithLt extends IWeatherData {
+  location: string;
 }
 
 /**google place autocomplete**/
@@ -76,42 +80,50 @@ export type Prediction = {
   place_id: string;
 };
 export type Autocomplete = { predictions: Prediction[] };
-/**pexels photo search**/
+
+/**unsplash photo **/
 export type Photo = {
   id: number;
-  url: string;
-  photographer: string;
-  photographer_url: string;
-  src: {
-    medium: string;
-  };
+  urls: { small: string };
 };
-export type PexelsData = {
-  photos: Photo[];
+export type UnsplashData = {
+  results: Photo[];
 };
-/**state**/
-export type City = {
-  photo: string;
-  name: string;
+/** city **/
+export type TCity = {
+  query: string;
+  address: string;
+  image: string;
 };
 
-type DataFetching<T> = {
-  data: T;
-  loading: boolean;
-  error: "";
-  success: boolean;
+/** Async **/
+const IDLE = "idle";
+const PEDING = "pending";
+const RESOLVED = "resolved";
+const REJETED = "rejected";
+const CLEAR = "clear";
+
+export type TAsyncData = IWeatherData | Autocomplete | null;
+
+type TActionType =
+  | typeof IDLE
+  | typeof PEDING
+  | typeof RESOLVED
+  | typeof CLEAR
+  | typeof REJETED;
+
+export type TAsyncState<T> = {
+  data: T | null | unknown;
+  status: string;
+  error: any;
 };
 
-export type TAutocomplete = DataFetching<Prediction[]>;
-export type TPlaceDetail = DataFetching<Detail>;
-export type TWeather = DataFetching<WeatherData[]>;
-export type TPexels = DataFetching<string[]>;
+export type TAsyncAction<T> = {
+  data: T | null | unknown;
+  type: TActionType;
+  error: any;
+};
 
-export interface StateType {
-  input: string;
-  city: string[];
-  pexels: TPexels;
-  autocomplete: TAutocomplete;
-  placeDetail: TPlaceDetail;
-  weather: TWeather;
-}
+export type TCashedWeather = {
+  [key: string]: IWeatherDataWithLt;
+};

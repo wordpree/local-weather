@@ -11,9 +11,9 @@ import {
   WaterPercent,
   TemperatureCelsius,
 } from "mdi-material-ui";
-import { getWeatherEle, getWeekday, getSmWeatherIcon } from "../util";
+import { getWeatherEle, getWeekday, getSmWeatherIcon } from "../../util";
 
-import { Daily } from "../type";
+import { Daily } from "../../type";
 
 interface IWDProps {
   day: Daily;

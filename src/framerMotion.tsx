@@ -23,7 +23,7 @@ export const searchVariants = {
       delay: 2,
       type: "spring",
       easeIn: "easeInOut",
-      stiffness: 100,
+      stiffness: 60,
     },
   },
 };

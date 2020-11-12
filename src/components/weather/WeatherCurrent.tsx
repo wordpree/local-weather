@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { makeStyles, Typography, IconButton } from "@material-ui/core";
 import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
-import { defaultImg } from "../constant";
-import { sortCurrentData } from "../util";
-import { imgBorderVariants, infoVariants } from "../framerMotion";
-import { Current } from "../type";
+import { defaultImg } from "../../constant";
+import { imgBorderVariants, infoVariants } from "../../framerMotion";
 
 type Ele = "Feels like" | "Sunset" | "Uv index";
 interface IWProps {
-  current: Current;
-  city: string;
-  timezoneOffset: number;
+  currentData: { [key: string]: string | number };
+  address: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -109,10 +106,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
+const WeatherCurrent = ({ currentData, address }: IWProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const weatherEle = sortCurrentData(current, timezoneOffset);
   const {
     iconUrl,
     date,
@@ -121,7 +117,7 @@ const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
     sunSet,
     uvi,
     description,
-  } = weatherEle;
+  } = currentData;
   const eles = { "Feels like": feels_like, Sunset: sunSet, "Uv index": uvi };
   const handleClick = () => setOpen((prev) => !prev);
   return (
@@ -153,7 +149,7 @@ const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
       </div>
       <div className={classes.body}>
         <div className={classes.main}>
-          <img src={iconUrl} alt="weather icon" />
+          <img src={iconUrl as string} alt="weather icon" />
           <div className={classes.date}>
             <Typography>Today</Typography>
             <Typography>{date}</Typography>
@@ -166,7 +162,7 @@ const WeatherCurrent = ({ current, city, timezoneOffset }: IWProps) => {
           </Typography>
         </div>
         <Typography variant="body2" className={classes.location}>
-          {city}
+          {address}
         </Typography>
         <div className={classes.eles}>
           {Object.keys(eles).map((k) => (

@@ -1,120 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Container, makeStyles, Grid } from "@material-ui/core";
-import cloud from "../assets/cloud.svg";
-import WeatherDay from "./WeatherDayList";
-import WeatherCityList from "./WeatherCityList";
-import Search from "./search";
-import WeatherCurrent from "./WeatherCurrent";
-import WeatherHour from "./WeatherHour";
-import { useWeatherContext } from "../stateManager/context";
-import { cloud1Variants, cloud2Variants } from "../framerMotion";
+import { Container, makeStyles } from "@material-ui/core";
+import Weather from "./weather";
+import CityBoard from "./city/CityBoard";
+import SearchForm from "./search";
+import useLocalStorage from "../useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   entry: {
     marginTop: "3rem",
-  },
-  right: {
-    background: "#F2FBFF",
-  },
-  searchContainer: {
-    padding: "1rem 0.25rem",
-    marginTop: "2rem",
-  },
-  left: {
-    overflow: "hidden",
-    position: "relative",
-    background: "#332C62",
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    "& >div >img ": {
-      maxWidth: 160,
-      position: "absolute",
-      [theme.breakpoints.down("sm")]: {
-        maxWidth: 80,
-      },
-    },
-    [theme.breakpoints.up(960)]: {
-      borderRadius: 0,
-      borderTopLeftRadius: 12,
-    },
-  },
-  img1: {
-    top: "30%",
-    right: -60,
-    [theme.breakpoints.down("sm")]: {
-      right: -40,
-    },
-  },
-  img2: {
-    bottom: "5%",
-    left: -60,
-    [theme.breakpoints.down("sm")]: {
-      left: -40,
+    [theme.breakpoints.down(500)]: {
+      paddingLeft: "0.35em",
+      paddingRight: "0.35em",
     },
   },
 }));
+
 const Banner = () => {
   const classes = useStyles();
-  const [cityId, setCityId] = useState(0);
-  const { state } = useWeatherContext();
-  const handleCityId = (id: number) => setCityId(id);
-  const { weather, pexels, city } = state;
-  const newSearchItem = city[city.length - 1];
-  const length = weather.data.length;
-  useEffect(() => {
-    if (weather.success) {
-      setCityId(length - 1);
-    }
-  }, [length, weather.success, newSearchItem]);
+  const defaultLocationQuery = "lat=-27.4697707&lon=153.0251235";
+  const defaultLocation = "Brisbane, Australia";
+  const { storage, setStorage } = useLocalStorage(
+    { query: defaultLocationQuery, address: defaultLocation },
+    "locationOfWeather"
+  );
+  const handleWeatherQuery = (query: string, address: string) => {
+    setStorage({ query, address });
+  };
+  const handleSelect = (query: string, address: string) => {
+    setStorage({ query, address });
+  };
+
   return (
     <Container className={classes.entry}>
       <motion.div initial="hidden" animate="visible">
-        <Grid container>
-          <Grid className={classes.left} item xs={12} md={5}>
-            <div>
-              <motion.img
-                variants={cloud1Variants}
-                src={cloud}
-                alt="cloud"
-                className={classes.img1}
-              />
-              <motion.img
-                src={cloud}
-                variants={cloud2Variants}
-                alt="cloud"
-                className={classes.img2}
-              />
-            </div>
-            <Search />
-            {weather.success && (
-              <>
-                <WeatherCurrent
-                  current={weather.data[cityId].current}
-                  city={city[cityId]}
-                  timezoneOffset={weather.data[cityId].timezone_offset}
-                />
-                <WeatherHour
-                  hour={weather.data[cityId].hourly}
-                  timezoneOffset={weather.data[cityId].timezone_offset}
-                />
-              </>
-            )}
-          </Grid>
-          <Grid className={classes.right} item xs={12} md={7}>
-            <WeatherCityList
-              city={city}
-              photo={pexels}
-              handleCityId={handleCityId}
-            />
-            {weather.success && (
-              <WeatherDay
-                day={weather.data[cityId].daily}
-                timezoneOffset={weather.data[cityId].timezone_offset}
-              />
-            )}
-          </Grid>
-        </Grid>
+        <SearchForm onWeatherQuery={handleWeatherQuery} />
+        <Weather {...storage}>
+          <CityBoard {...storage} onSelect={handleSelect} />
+        </Weather>
       </motion.div>
     </Container>
   );

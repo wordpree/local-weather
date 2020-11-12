@@ -1,17 +1,21 @@
 import {
-  StateType,
+  Photo,
   PlaceDetail,
   Autocomplete,
   Detail,
   Hourly,
   Daily,
+  TCity,
   Current,
+  TAsyncAction,
+  TAsyncState,
+  IWeatherData,
+  UnsplashData,
 } from "./type";
-import { ActionType } from "./stateManager/actionType";
-import { throttle } from "throttle-debounce";
+import defaultImg from "./assets/brisbane.jpg";
+// import { throttle } from "throttle-debounce";
 
 type SearchItem = { [key: string]: string };
-type Key = keyof StateType;
 
 export function getGoogleFetchUrl(
   pathUrl: string,
@@ -32,68 +36,38 @@ export function validation(response: Response) {
   }
 }
 
-export function combineReducer(reducers: any) {
-  const initialState = getInitialState(reducers);
-  return (state = initialState, action: ActionType) => {
-    const reducerKeys = Object.keys(reducers) as Key[];
-    return reducerKeys.reduce((acc, current) => {
-      const slice = reducers[current](state[current], action);
-      return { ...acc, [current]: slice };
-    }, state);
-  };
-}
+// export function combineReducer(reducers: any) {
+//   const initialState = getInitialState(reducers);
+//   return (state = initialState, action: ActionType) => {
+//     const reducerKeys = Object.keys(reducers) as Key[];
+//     return reducerKeys.reduce((acc, current) => {
+//       const slice = reducers[current](state[current], action);
+//       return { ...acc, [current]: slice };
+//     }, state);
+//   };
+// }
 
-export async function fetchData(fetchPara: { url: string; para?: any }) {
-  const response = await fetch(fetchPara.url, { ...fetchPara.para });
+export async function fetchData<T>(url: string): Promise<T> {
+  let response = await fetch(url);
   validation(response);
   return await response.json();
 }
 
 export function fetchingDataTypeGuard(
-  data: PlaceDetail | Autocomplete
+  data: PlaceDetail | Autocomplete | IWeatherData
 ): data is Autocomplete {
   return data.hasOwnProperty("predictions");
 }
 
-export function getInitialState(reducers: any) {
-  return Object.keys(reducers).reduce((acc, curr) => {
-    const slice = reducers[curr](undefined, { type: undefined });
-    return {
-      ...acc,
-      ...slice,
-    };
-  }, {} as StateType);
+export function autoCompleteTypeGuard(data: any): data is Autocomplete {
+  return data.hasOwnProperty("predictions");
 }
 
-function hanldeDataDispatch(dispatch: React.Dispatch<any>) {
-  return function (
-    actions: any,
-    fetchPara: { url: string; para?: any },
-    type: { [key: string]: string }
-  ) {
-    dispatch(actions.requestData(type.request));
-    fetchData(fetchPara)
-      .then((data) => dispatch(actions.getDataSuccess(data, type.success)))
-      .catch((error) =>
-        dispatch(actions.getDataFailed(error.message, type.failed))
-      );
-  };
-}
-
-export function getWeatherFetchUrl(detail: Detail, url: string) {
+export function getWeatherLocationQuery(detail: Detail) {
   if (!detail.hasOwnProperty("geometry")) return "";
   const location = detail.geometry.location;
   const { lat, lng } = location;
-  return `${url}&lat=${lat}&lon=${lng}`;
-}
-
-export function dispatchWithThrottle(dispatch: React.Dispatch<any>) {
-  return throttle(
-    200,
-    (actions, fetchPara, type) =>
-      fetchPara.url.trim() &&
-      hanldeDataDispatch(dispatch)(actions, fetchPara, type)
-  );
+  return `lat=${lat}&lon=${lng}`;
 }
 
 export function dateString(timeStamp: number) {
@@ -157,7 +131,12 @@ export function getWeatherEle(daily: Daily, timezone: number, icon: any) {
 
 export function getAddressByDet(detail: Detail) {
   const addr = detail.address_components.reduce((acc, curr) => {
-    if (curr.types.includes("locality") || curr.types.includes("country")) {
+    const types = curr.types;
+    if (
+      types.includes("locality") ||
+      types.includes("administrative_area_level_1") ||
+      types.includes("country")
+    ) {
       acc.push(curr.short_name);
       return acc;
     }
@@ -178,4 +157,59 @@ export function arrayStack(arr: any[], insert: any) {
     temp.shift();
   }
   return temp;
+}
+
+export function reducer<T>(state: TAsyncState<T>, action: TAsyncAction<T>) {
+  const { data, error, type } = action;
+  let status = { status: "idle" };
+  switch (type) {
+    case "pending":
+      status = { status: "pending" };
+      break;
+    case "resolved":
+      status = { status: "resolved" };
+      break;
+    case "rejected":
+      status = { status: "rejected" };
+      break;
+    case "clear":
+      status = { status: "idle" };
+      break;
+    default:
+      throw new Error(`unknown action type: ${type}`);
+  }
+  return { ...state, data, error, ...status };
+}
+
+export function getGoogleFetchingUrl(
+  base: string,
+  sessiontoken: string,
+  input: string,
+  isDetail: boolean
+) {
+  const queryPara = isDetail ? "place_id" : "input";
+  return `${base}&${queryPara}=${input}&sessiontoken=${sessiontoken}`;
+}
+
+export function processState<T>(state: TAsyncState<T>) {
+  const { data, error, status } = state;
+  const pending = status === "pending";
+  const resolved = status === "resolved";
+  const rejected = status === "rejected";
+  const asyncData = data as T;
+  return { pending, resolved, rejected, asyncData, error };
+}
+
+export function getRandomPhoto(photos: Photo[]) {
+  const random = Math.floor(photos.length * Math.random());
+  return photos[random].urls.small;
+}
+
+export function getImgFromUnsplash(data: UnsplashData) {
+  const results = data.results;
+  return results.length ? getRandomPhoto(results) : defaultImg;
+}
+
+export function isQueryInCity(query: string, city: TCity[]) {
+  return city.find((c) => c.query === query);
 }

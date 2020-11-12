@@ -56,7 +56,7 @@ const Header = () => {
         />
       </motion.div>
       <Typography variant="h3" className={classes.title}>
-        A simple weather forecast website
+        A weather forecast App
       </Typography>
       <motion.div onTap={() => yCycle()} animate={{ y, rotate: y }}>
         <Button className={classes.menu}>

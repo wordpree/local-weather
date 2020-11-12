@@ -7,6 +7,8 @@ const useStyles = makeStyles({
     display: "flex",
     maxWidth: 240,
     listStyle: "none",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   dot: {
     height: 5,

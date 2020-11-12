@@ -7,11 +7,11 @@ import {
   Typography,
 } from "@material-ui/core";
 
-interface ICGProps {
-  city: string;
-  photo: string;
-  id: number;
-  handleCityId(id: number): void;
+interface ICProps {
+  image: string;
+  address: string;
+  query: string;
+  click(query: string, address: string): void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -33,28 +33,31 @@ const useStyles = makeStyles((theme) => ({
     background: "linear-gradient(90deg,#C7B2E9 0%,#F7C8C1 100%)",
     backgroundPosition: "center",
     backgroundSize: "cover",
-    height: 0,
-    paddingTop: "75.75%",
+    height: 109,
+    minWidth: 130,
   },
   name: {
     paddingTop: "1rem",
   },
 }));
 
-const WeatherCity = ({ city, photo, id, handleCityId }: ICGProps) => {
+const City: React.FC<ICProps> = ({ image, address, click, query }) => {
   const classes = useStyles();
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    click(query, address);
+  };
   return (
     <div className={classes.entry}>
       <Card className={classes.card}>
-        <CardActionArea onClick={() => handleCityId(id)}>
-          <CardMedia image={photo} className={classes.media} />
+        <CardActionArea onClick={handleClick}>
+          <CardMedia image={image} className={classes.media} />
         </CardActionArea>
       </Card>
       <Typography variant="body2" className={classes.name}>
-        {city}
+        {address}
       </Typography>
     </div>
   );
 };
 
-export default WeatherCity;
+export default City;

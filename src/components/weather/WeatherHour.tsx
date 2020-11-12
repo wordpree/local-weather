@@ -1,15 +1,12 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { getDateHourly } from "../util";
-import { Hourly } from "../type";
 
 interface IWPorps {
-  hour: Hourly[];
-  timezoneOffset: number;
+  time: string[];
+  data: number[];
 }
 
-const WeatherHour = ({ hour, timezoneOffset }: IWPorps) => {
-  const { data, time } = getDateHourly(hour, timezoneOffset);
+const WeatherHour = ({ time, data }: IWPorps) => {
   const options = {
     legend: {
       labels: {
