@@ -18,12 +18,32 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### Weather forcast
 
 Real time | Hourly | Daily <br />
-Switch back and forth for the latest three locations of weather details.
+Switch back and forth for the previous locations of weather details based on your interested cities.
 
 ### Data comsuming resources
 
-Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Pexels](https://www.pexels.com/).
+Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Pexels](https://www.unsplash.com/).
 
 ### CORS
 
-**Note:In order to avoid being block by Google place API, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/).**
+**Note:In order to avoid Cross-Origin request issue, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/).**
+
+### Technologies Used
+
+![App data flowchart](https://inspiring-weather.netlify.app/static/media/weather-flow.4e76cf26.jpg)
+
+- Rest API :bowtie:
+
+- Material UI :koala:
+
+- Custom Hooks :dog:
+
+- Framer Motion :fish:
+
+- React Hooks :sunflower:
+
+- Typescript :bear:
+
+### Live Demo
+
+[Weather forcast app](https://inspiring-weather.netlify.app/)

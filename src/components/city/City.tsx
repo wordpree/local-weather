@@ -1,4 +1,5 @@
 import React from "react";
+import flow from "../../assets/weather-flow.jpg";
 import {
   Card,
   CardMedia,
@@ -43,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
 
 const City: React.FC<ICProps> = ({ image, address, click, query }) => {
   const classes = useStyles();
+  console.log(flow);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     click(query, address);
   };

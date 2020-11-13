@@ -4,7 +4,7 @@ import City from "./City";
 import useAsync from "../../useAsync";
 import { UnsplashData, TCity } from "../../type";
 import { fetchData, isQueryInCity, getImgFromUnsplash } from "../../util";
-import { UNSPLASH_QUERY, U_API_KEY } from "../../constant";
+import { UNSPLASH_QUERY } from "../../constant";
 
 interface ICProps {
   query: string;
@@ -44,9 +44,7 @@ const CityBoard: React.FC<ICProps> = ({ query, address, onSelect }) => {
   const { run } = useAsync<UnsplashData>();
 
   useEffect(() => {
-    const fetchUrl = `${UNSPLASH_QUERY}query=${
-      address.split(",")[0]
-    }&client_id=${U_API_KEY}`;
+    const fetchUrl = `${UNSPLASH_QUERY}&query=${address.split(",")[0]}`;
     if (isQueryInCity(query, city)) {
       return;
     }
