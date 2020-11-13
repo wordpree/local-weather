@@ -1,6 +1,4 @@
 export { default as defaultImg } from "./assets/brisbane.jpg";
-export { default as flow } from "./assets/weather-flow.jpg";
-export { default as app } from "./assets/weather-app.jpg";
 
 const G_API_KEY = "AIzaSyDhCjAt2GiEpze45zZny01LhjvOCBnm5_I";
 const W_API_KEY = "00194910deb21b1edc80422332e0c1ec";

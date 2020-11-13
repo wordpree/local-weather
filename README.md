@@ -30,7 +30,7 @@ Powed by [Google place API](https://developers.google.com/places/web-service/ove
 
 ### Technologies Used
 
-![App data flowchart](https://inspiring-weather.netlify.app/static/media/weather-flow.4e76cf26.jpg)
+![App data flowchart](src/assets/weather-flow.jpg)
 
 - :bowtie: Rest API
 
@@ -46,6 +46,6 @@ Powed by [Google place API](https://developers.google.com/places/web-service/ove
 
 ### Live Demo
 
-![screenshot of the website](https://inspiring-weather.netlify.app/static/media/weather-app.4dc122b5.png)
+![screenshot of the website](/src/assets/weather-app.png)
 
 [Weather forcast app](https://inspiring-weather.netlify.app/)
