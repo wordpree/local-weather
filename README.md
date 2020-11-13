@@ -47,4 +47,5 @@ Powed by [Google place API](https://developers.google.com/places/web-service/ove
 ### Live Demo
 
 ![screenshot of the website](https://inspiring-weather.netlify.app/static/media/weather-app.4dc122b5.png)
+
 [Weather forcast app](https://inspiring-weather.netlify.app/)
