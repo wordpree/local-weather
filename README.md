@@ -22,7 +22,7 @@ Switch back and forth for the previous locations of weather details based on you
 
 ### Data comsuming resources
 
-Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Pexels](https://www.unsplash.com/).
+Powed by [Google place API](https://developers.google.com/places/web-service/overview) | [Open weather map](https://openweathermap.org/) | [Unsplash](https://www.unsplash.com/).
 
 ### CORS
 
