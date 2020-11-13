@@ -26,24 +26,25 @@ Powed by [Google place API](https://developers.google.com/places/web-service/ove
 
 ### CORS
 
-**Note:In order to avoid Cross-Origin request issue, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/).**
+**Note:In order to avoid Cross-Origin request issue, it implements [cors-anywhere](https://cors-anywhere.herokuapp.com/). Make sure the proxy run smoothly**
 
 ### Technologies Used
 
 ![App data flowchart](https://inspiring-weather.netlify.app/static/media/weather-flow.4e76cf26.jpg)
 
-- Rest API :bowtie:
+- :bowtie: Rest API
 
-- Material UI :koala:
+- :koala: Material UI
 
-- Custom Hooks :dog:
+- :dog: Custom Hooks
 
-- Framer Motion :fish:
+- :fish: Framer Motion
 
-- React Hooks :sunflower:
+- :sunflower: React Hooks
 
-- Typescript :bear:
+- :bear: Typescript
 
 ### Live Demo
 
+![screenshot of the website](https://inspiring-weather.netlify.app/static/media/weather-app.4dc122b5.png)
 [Weather forcast app](https://inspiring-weather.netlify.app/)
