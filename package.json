@@ -14,7 +14,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/throttle-debounce": "^2.1.0",
     "@types/uuid": "^8.3.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "framer-motion": "^1.11.1",
     "mdi-material-ui": "^6.16.0",
